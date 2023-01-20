@@ -39,9 +39,31 @@ if subreddit == "No" or filter == "No":
 else:
     res = requests.get(f"https://oauth.reddit.com/r/{subreddit.lower()}/{filter.lower()}", headers=headers)
     children = res.json()['data']['children']
-    for post in children:
-          # print(f"{post['data']['title']} \n")
-          print(f"""{post['data']['title']}: {post['data']['selftext']} 
-----------------------------------------------------------------------------------------------------------------------------
-          """)
+    # print(children[0])
 
+    for idx, post in enumerate(children):
+        print(f"""{idx + 1}.) {post['data']['title']} Score: {post['data']['score']}
+----------------------------------------------------------------------------------------------------------------------------
+        """)
+    
+    selection_string = input("Do you want to look at more details for a post? Type in the number or No to leave: ")
+
+    if selection_string == "No":
+        print("Bye")
+    else:
+        selection_int = int(selection_string)
+        # print(children[selection_int - 1])
+        selected_data = children[selection_int - 1]['data']
+        # print(selected_data)
+
+        subreddit = selected_data['subreddit']
+        title = selected_data['title']
+        selftext = selected_data['selftext']
+        ups = selected_data['ups']
+        downs = selected_data['downs']
+        score = selected_data['score']
+
+        print(f"""
+SubReddit: {subreddit}
+{title} Score: {score} Up: {ups} Downs: {downs}
+{selftext} """)
