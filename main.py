@@ -1,14 +1,8 @@
-#?   Call it EasyReddit- for orgammerrs who are bored while in if the terminal and want to have a quick look on reddit
-
-# ? a python app where user inputs a keyword and then all the subreddits with that keyword are shown for the user to click on and then the top rated in descending order get shown--- very simple but good use of API for python
-
 #*  https://medium.com/geekculture/utilizing-reddits-api-8d9f6933e192
 #* https://towardsdatascience.com/how-to-use-the-reddit-api-in-python-5e05ddfd1e5c
 #*  https://www.reddit.com/dev/api/#GET_new
 
-#  TODO add in option at start for hot, new etc
-
-#  TODO add in indices for each post and then allow user to select an indicy based on which post they want to view more details about (comments, votes etc)
+#  TODO add in colors for questions and titles/authors, just makes it bit easier to read
 
 import requests
 
@@ -44,17 +38,13 @@ else:
     for idx, post in enumerate(children):
         print(f"""{idx + 1}.) {post['data']['title']}- Score: {post['data']['score']}
 -----------------------------------------------------------------------------------------""")
-    
-    
-    selection_string = input("Do you want to look at more details for a post? Type in the number or No to leave: ")
+        
+    selection_string = input("\n Do you want to look at more details for a post? Type in the number or No to leave: ")
 
     while selection_string != "No":
       if selection_string == "No":
           print("Bye")
 
-      elif selection_string.lower() == 'comments':
-          print('comments')
-          selection_string = input("Do you want to look at more details for a post? Type in the number or No to leave: ")
       else:
           selection_int = int(selection_string)
           selected_data = children[selection_int - 1]['data']
@@ -70,13 +60,30 @@ else:
           score = selected_data['score']
 
           print(f"""
-  SubReddit: r/{subreddit}
-  Author: {author}
-  Score: {score} Up: {ups} Downs: {downs}
-  {title} 
-  {selftext} 
-  --------------------------------------------------------------------------""")
+SubReddit: r/{subreddit}
+Author: {author}
+Score: {score} Up: {ups} Downs: {downs}
+{title} 
+{selftext} 
+--------------------------------------------------------------------------
+""")
           
-          selection_string = input("Do you want to look at more details for another post? Type in the number. \n If you want to view comments for this post, type 'comments'. \n Or 'No' to leave: ")
+          selection_string = input("Do you want to look at more details for another post? Type in the number. \nIf you want to view comments for this post, type 'comments'. \nOr 'No' to leave: ")
+          
+            
+          if selection_string.lower() == 'comments':
+            comments_of_post = requests.get(f"https://oauth.reddit.com/r/{subreddit.lower()}/comments/{post_id}", headers=headers)
+            comments = comments_of_post.json()[1]['data']['children']
 
-      
+            for idx, comment in enumerate(comments):
+                comment_data = comment['data']
+                # print(comment_data)
+
+                print(f"""
+{idx + 1}). {comment_data['author']}- Score: {comment_data['score']}
+{comment_data['body']}
+-----------------------------------------------------------------------
+""")
+
+            selection_string = input("Do you want to look at more details for a post? Type in the number or No to leave: ")
+            # print(selection_string)
