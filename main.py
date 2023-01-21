@@ -50,7 +50,7 @@ else:
       if selection_string.lower() == "no":
           print("Bye")
           exit
-      else:
+      while selection_string.lower() != 'no':
           selection_int = int(selection_string)
           selected_data = children[selection_int - 1]['data']
           # print(selected_data)
@@ -81,4 +81,8 @@ else:
 
                 print(f"{Style.BRIGHT}{Fore.BLUE}{idx + 1}{Style.RESET_ALL}). {Style.BRIGHT}{Fore.GREEN}{comment_data['author']}- {Fore.YELLOW}Score: {Fore.CYAN}{comment_data['score']}{Style.RESET_ALL} \n{comment_data['body']}\n----------------------------------------------------------------------")
 
-            selection_string = input("Do you want to look at more details for a post? Type in the  " + Style.BRIGHT + Fore.BLUE + "number " + Style.RESET_ALL + "or " +Style.BRIGHT + Fore.RED + "No " + Style.RESET_ALL + "to leave: ")
+            selection_string = input("Do you want to look at more details for a post? Type in the " + Style.BRIGHT + Fore.BLUE + "number " + Style.RESET_ALL + "or " +Style.BRIGHT + Fore.RED + "No " + Style.RESET_ALL + "to leave: ")
+
+            if selection_string.lower() == "no":
+                print("Bye")
+                exit
