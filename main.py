@@ -42,28 +42,41 @@ else:
     # print(children[0])
 
     for idx, post in enumerate(children):
-        print(f"""{idx + 1}.) {post['data']['title']} Score: {post['data']['score']}
-----------------------------------------------------------------------------------------------------------------------------
-        """)
+        print(f"""{idx + 1}.) {post['data']['title']}- Score: {post['data']['score']}
+-----------------------------------------------------------------------------------------""")
+    
     
     selection_string = input("Do you want to look at more details for a post? Type in the number or No to leave: ")
 
-    if selection_string == "No":
-        print("Bye")
-    else:
-        selection_int = int(selection_string)
-        # print(children[selection_int - 1])
-        selected_data = children[selection_int - 1]['data']
-        # print(selected_data)
+    while selection_string != "No":
+      if selection_string == "No":
+          print("Bye")
 
-        subreddit = selected_data['subreddit']
-        title = selected_data['title']
-        selftext = selected_data['selftext']
-        ups = selected_data['ups']
-        downs = selected_data['downs']
-        score = selected_data['score']
+      elif selection_string.lower() == 'comments':
+          print('comments')
+          selection_string = input("Do you want to look at more details for a post? Type in the number or No to leave: ")
+      else:
+          selection_int = int(selection_string)
+          selected_data = children[selection_int - 1]['data']
+          # print(selected_data)
 
-        print(f"""
-SubReddit: {subreddit}
-{title} Score: {score} Up: {ups} Downs: {downs}
-{selftext} """)
+          post_id = selected_data['id']
+          author = selected_data['author']
+          subreddit = selected_data['subreddit']
+          title = selected_data['title']
+          selftext = selected_data['selftext']
+          ups = selected_data['ups']
+          downs = selected_data['downs']
+          score = selected_data['score']
+
+          print(f"""
+  SubReddit: r/{subreddit}
+  Author: {author}
+  Score: {score} Up: {ups} Downs: {downs}
+  {title} 
+  {selftext} 
+  --------------------------------------------------------------------------""")
+          
+          selection_string = input("Do you want to look at more details for another post? Type in the number. \n If you want to view comments for this post, type 'comments'. \n Or 'No' to leave: ")
+
+      
