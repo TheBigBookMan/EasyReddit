@@ -38,42 +38,49 @@ else:
         print("Bye")
         exit
     else:
-      res = requests.get(f"https://oauth.reddit.com/r/{subreddit.lower()}/{filter.lower()}", headers=headers)
-      children = res.json()['data']['children']
-      # print(children[0])
+        try:
+            res = requests.get(f"https://oauth.reddit.com/r/{subreddit.lower()}/{filter.lower()}", headers=headers)
+            children = res.json()['data']['children']
 
-      for idx, post in enumerate(children):
-          print(f"{Style.BRIGHT}{Fore.BLUE}{idx + 1}{Style.RESET_ALL}.) {post['data']['title']}- {Style.BRIGHT}{Fore.YELLOW}Score: {Fore.CYAN}{post['data']['score']}{Style.RESET_ALL}\n-----------------------------------------------------------------------------------------")
-          
-      selection_string = input("\n Do you want to look at more details for a post? Type in the " + Fore.BLUE + "number " + Style.RESET_ALL + " or " + Fore.RED + "No " + Style.RESET_ALL + "to leave: ")
-
-      if selection_string.lower() == "no":
-          print("Bye")
-          exit
-      while selection_string.lower() != 'no':
-          selection_int = int(selection_string)
-          selected_data = children[selection_int - 1]['data']
-          # print(selected_data)
-
-          post_id = selected_data['id']
-          author = selected_data['author']
-          subreddit = selected_data['subreddit']
-          title = selected_data['title']
-          selftext = selected_data['selftext']
-          ups = selected_data['ups']
-          downs = selected_data['downs']
-          score = selected_data['score']
-
-          print(f"{Style.BRIGHT}{Fore.BLUE}SubReddit: r/{Fore.RED}{subreddit} \n{Fore.BLUE}Author: {Fore.GREEN}{author} \n{Fore.YELLOW}Score: {Fore.CYAN}{score} {Fore.YELLOW}Up: {Fore.CYAN}{ups} {Fore.YELLOW}Downs: {Fore.CYAN}{downs} \n{Fore.CYAN}{title}{Style.RESET_ALL} \n{selftext} \n--------------------------------------------------------------------------\n")
+            print(res)
+        except KeyError: 
+            print("That didn't work, make sure you type in a correct subreddit")
             
-          selection_string = input("Do you want to look at more details for another post? Type in the " + Style.BRIGHT + Fore.BLUE + "number " + Style.RESET_ALL + " \nIf you want to view comments for this post, type " +Style.BRIGHT + Fore.YELLOW + "comments " + Style.RESET_ALL + ". \nOr " +Style.BRIGHT + Fore.RED + "No " + Style.RESET_ALL + "to leave: ")
+
+      # print(children[0])  
+
+        for idx, post in enumerate(children):
+            print(f"{Style.BRIGHT}{Fore.BLUE}{idx + 1}{Style.RESET_ALL}.) {post['data']['title']}- {Style.BRIGHT}{Fore.YELLOW}Score: {Fore.CYAN}{post['data']['score']}{Style.RESET_ALL}\n-----------------------------------------------------------------------------------------")
             
-          if selection_string.lower() == 'no':
-              print("Bye")
-              exit
-          elif selection_string.lower() == 'comments':
-            comments_of_post = requests.get(f"https://oauth.reddit.com/r/{subreddit.lower()}/comments/{post_id}", headers=headers)
-            comments = comments_of_post.json()[1]['data']['children']
+        selection_string = input("\n Do you want to look at more details for a post? Type in the " + Fore.BLUE + "number " + Style.RESET_ALL + " or " + Fore.RED + "No " + Style.RESET_ALL + "to leave: ")
+
+        if selection_string.lower() == "no":
+            print("Bye")
+            exit
+        while selection_string.lower() != 'no':
+            selection_int = int(selection_string)
+            selected_data = children[selection_int - 1]['data']
+            # print(selected_data)
+
+            post_id = selected_data['id']
+            author = selected_data['author']
+            subreddit = selected_data['subreddit']
+            title = selected_data['title']
+            selftext = selected_data['selftext']
+            ups = selected_data['ups']
+            downs = selected_data['downs']
+            score = selected_data['score']
+
+            print(f"{Style.BRIGHT}{Fore.BLUE}SubReddit: r/{Fore.RED}{subreddit} \n{Fore.BLUE}Author: {Fore.GREEN}{author} \n{Fore.YELLOW}Score: {Fore.CYAN}{score} {Fore.YELLOW}Up: {Fore.CYAN}{ups} {Fore.YELLOW}Downs: {Fore.CYAN}{downs} \n{Fore.CYAN}{title}{Style.RESET_ALL} \n{selftext} \n--------------------------------------------------------------------------\n")
+                
+            selection_string = input("Do you want to look at more details for another post? Type in the " + Style.BRIGHT + Fore.BLUE + "number " + Style.RESET_ALL + " \nIf you want to view comments for this post, type " +Style.BRIGHT + Fore.YELLOW + "comments " + Style.RESET_ALL + ". \nOr " +Style.BRIGHT + Fore.RED + "No " + Style.RESET_ALL + "to leave: ")
+                
+            if selection_string.lower() == 'no':
+                print("Bye")
+                exit
+            elif selection_string.lower() == 'comments':
+                comments_of_post = requests.get(f"https://oauth.reddit.com/r/{subreddit.lower()}/comments/{post_id}", headers=headers)
+                comments = comments_of_post.json()[1]['data']['children']
 
             for idx, comment in enumerate(comments):
                 comment_data = comment['data']
